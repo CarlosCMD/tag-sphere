@@ -9,7 +9,7 @@
 An Android library to implement an animated tag sphere
 
 - **API SDK 21+**
-- **Written in [Kotlin](https://kotlinlang.org)**
+- **Written in [Kotlin](https://kotlinlang.org) Check jvm stdlib for usage in Java**
 - **Supports customization**
 
 
@@ -27,7 +27,8 @@ Then, add the library to your module build.gradle:
 
 ```groovy
 dependencies {
-    implementation 'com.github.magic-goop:tag-sphere:1.0.0 // or LATEST.RELEASE.HERE'
+    implementation 'com.github.magic-goop:tag-sphere:1.0.0 // or LATEST.RELEASE'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.20-Beta2'
 }
 ```
 
@@ -43,22 +44,19 @@ Add widget in your xml layout like this:
 
 In code add list of tags you want to display:
 ```java
-(0..40).map {
-  TextTagItem(text = "Some text $it")
-}.toList().let {
-  tagView.addTagList(it)
-}
+List<TextTagItem> tagList = IntStream.rangeClosed(0, 40)
+    .mapToObj(it -> new TextTagItem("Some text " + it))
+    .collect(Collectors.toList());
+tagView.addTagList(tagList);
 ```
 
 You can change text appearance via:
 ```java
-tagView.setTextPaint(
-  TextPaint().apply {
-    isAntiAlias = true
-    textSize = resources.getDimension(R.dimen.tag_text_size)
-    color = Color.DKGRAY
-  }
-)
+tagView.setTextPaint(new TextPaint() {{
+    setAntiAlias(true);
+    setTextSize(15);
+    setColor(Color.parseColor("#212121"));
+}});
 ```
 ###### Note: ```.setTextPaint``` should be called before setting tags list
 
